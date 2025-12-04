@@ -1,0 +1,48 @@
+# ----------------------------
+# Python cache & bytecode
+# ----------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# C extensions
+*.so
+
+# Distribution / build
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+sdist/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# PyCharm / JetBrains IDE
+.idea/
+*.iml
+
+# Jupyter notebooks (if any)
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs & temp files
+*.log
+*.tmp
+*.swp
+*.swo
+
+# PyBricks-specific
+# (Nothing special is generated locally
