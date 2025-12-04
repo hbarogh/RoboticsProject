@@ -3,6 +3,7 @@ from pybricks.pupdevices import Motor, ColorSensor, UltrasonicSensor, ForceSenso
 from pybricks.parameters import Button, Color, Direction, Port, Side, Stop
 from pybricks.robotics import DriveBase
 from pybricks.tools import wait, StopWatch
+from enum import Enum
 
 '''
 This is the code for our stair climbing robot
@@ -11,11 +12,12 @@ This is the code for our stair climbing robot
 - front motor is the motor that controls the front wheels
 
 - All of the measurements will be in cm
-- NEED TO DO'S:
-    - GET THE RIGHT PORTS FOR ALL OF THE THINGS
-    - MEASURE FROM THE ULTRASONIC SENSOR TO THE GROUND
-    - 
 '''
+
+
+class ClimbingDirections(Enum):
+    UP = "up"
+    DOWN = "down"
 
 
 class StairClimber:
@@ -47,7 +49,16 @@ class StairClimber:
         self.back_motor.brake()
         self.front_motor.brake()
 
-    # FUNCTIONS THAT NEED TO BE COMPLETED==============================
+    '''
+    This function will be detecting a step for the robot to CLIMB
+    '''
+
+    def detect_step(self):
+        # this will just be returning if a step is within the threshold
+        # this will be the true if there is something within 2 cm from the ultrasonic sensor
+        return self.dist_sensor.distance() < 20
+
+        # FUNCTIONS THAT NEED TO BE COMPLETED==============================
 
     '''
     This will be the function to rotate the robot
@@ -58,28 +69,59 @@ class StairClimber:
         pass
 
     '''
-    This function will be detecting a step for the robot to CLIMB
+    This will be the function for operating the carriage motor
+    - this will be where we will need to operate the carriage motor and will need to have the degrees and distance
     '''
 
-    def detect_step(self):
-        # this will just be returning if a step is within the threshold
-        # this will be the true if there is something within 2 cm from the ultrasonic sensor
-        return self.dist_sensor.distance() < 20
+    def operate_carriage_motor(self, dist):
+
+        # calculating the input to the run function here: NEED TO DO THIS ==============================================
+        self.carriage_motor.run()
 
     '''
-    This function will be used to determine if we have completed the ascent of the stairs
-    FINISH THIS FUNCTION!!!!!!!!!!!!!!!!!
+    This will be the function for climbing a step 
     '''
 
-    def completed_ascent(self):
-        pass
+    def climb_step(self):
+        # 3 step process
+        # 1st step accellerate with both front and back motors, and then we will also be lowering the carriage to keep back wheels on the ground
+        self.move_forward()
+        self.operate_carriage(ClimbingDirections.DOWN)
+
+        # 2nd step: need a way to determine when we have completed step 1
+        # DO THIS PART=====================================================
+
+        # 3rd step: will be to accellerate with front motors and raising the carriage
+        self.move_forward()
+        self.operate_carriage(ClimbingDirections.UP)
 
     '''
-    This will be the function of raising the carrraige and also how much we need to raise it by
+    This will be the function of raising/lowering the carrraige and also how much we need to adjust it by
     FINISH FUNCTION!!!
     '''
 
-    def raise_carriage(self):
+    def operate_carriage(self, direction):
+        if direction == ClimbingDirections.UP:
+            self.operate_carriage_motor(
+                30)  # this will be changed need to calculate the input that we need to put in there ********************
+        else:  # this will be for when we need the direction to go down
+            self.operate_carriage_motor(-30)  # also need to get this done **********************************
+
+    '''
+    This will be the function to determine if we have completed the descent of the stairs
+    - One way we could do it is that we could log how many stairs that we climbed to do the acsent and then once we have climbed 
+    down that amount then we are at that descent and done. Not sure if that's allowed
+    '''
+
+    def completed_descent(self):
+
+        pass
+
+    '''
+    This function will be used to determine if we have completed the ascent of the stairs
+    '''
+
+    def completed_ascent(self):
         pass
 
     '''
@@ -87,6 +129,7 @@ class StairClimber:
     '''
 
     def run(self):
+
         # going to have a ascending part of running and decsending part of running
         while not self.completed_ascent():
             if not self.detect_step():
