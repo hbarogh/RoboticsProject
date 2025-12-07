@@ -56,7 +56,6 @@ class StairClimber:
     '''
 
     def detect_step(self):
-        # this will just be returning if a step is within the threshold
         # this will be the true if there is something within 2 cm from the ultrasonic sensor
         return self.dist_sensor.distance() < 20
 
@@ -132,7 +131,16 @@ class StairClimber:
     the ascent.
     '''
     def completed_ascent(self):
-        pass
+        color = self.color_sensor.color()
+        #if we see black, need to check if there is a big change in distance from the ultrasonic sensor
+        #if there is a distance greater than 5 cm, then we know that we have hit the top of the stairs
+        if color == Color.BLACK:
+            if self.dist_sensor.distance() > 50:
+                return True
+
+        return False
+
+
 
     '''
     This will be the main function for how the robot runs and will be climbing robots
