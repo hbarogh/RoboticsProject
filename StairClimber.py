@@ -66,23 +66,28 @@ class StairClimber:
     def turn_robot(self, degrees):
         self.drive_base.turn(degrees)  # for full roation we can just use 360 for 360 degrees
 
-    # FUNCTIONS THAT NEED TO BE COMPLETED==============================
-
-
     '''
     This will be the function for operating the carriage motor
-    - this will be where we will need to operate the carriage motor and will need to have the degrees and distance
     '''
 
-    def operate_carriage_motor(self, dist):
+    def operate_carriage_motor(self, speed):
+        self.carriage_motor.run_until_stalled(speed)
 
-        # calculating the input to the run function here: NEED TO DO THIS ==============================================
-        self.carriage_motor.run()
+    '''
+        This will be the function of raising/lowering the carriage and also how much we need to adjust it by
+        '''
 
+    def operate_carriage(self, direction):
+        if direction == ClimbingDirections.UP:
+            self.operate_carriage_motor(200)
+        else:  # this will be for when we need the direction to go down
+            self.operate_carriage_motor(-200)
+
+
+    # FUNCTIONS THAT NEED TO BE COMPLETED==============================
     '''
     This will be the function for climbing a step 
     '''
-
     def climb_step(self):
         # 3 step process
         # 1st step accellerate with both front and back motors, and then we will also be lowering the carriage to keep back wheels on the ground
@@ -96,16 +101,6 @@ class StairClimber:
         self.move_forward()
         self.operate_carriage(ClimbingDirections.UP)
 
-    '''
-    This will be the function of raising/lowering the carrraige and also how much we need to adjust it by
-    FINISH FUNCTION!!!
-    '''
-
-    def operate_carriage(self, direction):
-        if direction == ClimbingDirections.UP:
-            self.operate_carriage_motor(30)  # this will be changed need to calculate the input that we need to put in there ********************
-        else:  # this will be for when we need the direction to go down
-            self.operate_carriage_motor(-30)  # also need to get this done **********************************
 
     '''
     This will be the function to determine if we have completed the descent of the stairs
