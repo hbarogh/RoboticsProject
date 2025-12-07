@@ -1,6 +1,6 @@
 from pybricks.hubs import PrimeHub
 from pybricks.pupdevices import Motor, ColorSensor, UltrasonicSensor, ForceSensor
-from pybricks.parameters import Button, Color, Direction, Port, Side, Stop
+from pybricks.parameters import Button, Color, Direction, Port, Stop
 from pybricks.robotics import DriveBase
 from pybricks.tools import wait, StopWatch
 from enum import Enum
@@ -21,24 +21,26 @@ class ClimbingDirections(Enum):
 
 
 class StairClimber:
-    def __init__(self, back_motor, front_motor, carriage_motor, dist_sensor, color_sensor):
-        self.back_motor = back_motor
-        self.front_motor = front_motor
+    def __init__(self, left_motor, right_motor, carriage_motor, dist_sensor, color_sensor):
+        self.left_motor = left_motor
+        self.right_motor = right_motor
         self.carriage_motor = carriage_motor
         self.dist_sensor = dist_sensor
         self.color_sensor = color_sensor
+
+        #making the drive base here and will be using this to control the robot
+        wheel_diameter = 56 #this is in mm
+        axel_track = 120 #might need to be changed later
+        self.drive_base = DriveBase(self.left_motor, self.right_motor, wheel_diameter, axel_track)
 
     # FUNCTIONS THAT ARE DONE=========================================
     '''
     This is our move forward function and it keeps the robot moving forward until the ultrasonic sensor 
     detects something within 2 cm
     '''
-
     def move_forward(self, speed=200):
         while self.dist_sensor.distance() > 20:
-            self.back_motor.run(speed)
-            self.front_motor.run(speed)
-
+            self.drive_base.drive(speed, 0) #putting zero for the turn rate
         self.stop_robot()
 
     '''
@@ -46,8 +48,7 @@ class StairClimber:
     '''
 
     def stop_robot(self):
-        self.back_motor.brake()
-        self.front_motor.brake()
+        self.drive_base.stop()
 
     '''
     This function will be detecting a step for the robot to CLIMB
@@ -58,15 +59,15 @@ class StairClimber:
         # this will be the true if there is something within 2 cm from the ultrasonic sensor
         return self.dist_sensor.distance() < 20
 
-        # FUNCTIONS THAT NEED TO BE COMPLETED==============================
-
     '''
-    This will be the function to rotate the robot
-    COMPLETE THIS FUNCTION
-    '''
+        This will be the function to rotate the robot
+        '''
 
     def turn_robot(self, degrees):
-        pass
+        self.drive_base.turn(degrees)  # for full roation we can just use 360 for 360 degrees
+
+    # FUNCTIONS THAT NEED TO BE COMPLETED==============================
+
 
     '''
     This will be the function for operating the carriage motor
@@ -102,8 +103,7 @@ class StairClimber:
 
     def operate_carriage(self, direction):
         if direction == ClimbingDirections.UP:
-            self.operate_carriage_motor(
-                30)  # this will be changed need to calculate the input that we need to put in there ********************
+            self.operate_carriage_motor(30)  # this will be changed need to calculate the input that we need to put in there ********************
         else:  # this will be for when we need the direction to go down
             self.operate_carriage_motor(-30)  # also need to get this done **********************************
 
@@ -139,7 +139,7 @@ class StairClimber:
 
         # this will be the descending part of running the program
         # first need to turn the robot
-        self.turn_robot()
+        self.turn_robot(360)
         while not self.completed_descent():
             if not self.detect_step_descent():
                 self.move_forward()
