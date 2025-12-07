@@ -39,8 +39,8 @@ class StairClimber:
     detects something within 2 cm
     '''
     def move_forward(self, speed=200):
-        self.drive.drive(speed, 0)
-        while self.dist_sensor.distance() > self.detect_distance:
+        self.drive_base.drive(speed, 0)
+        while not self.detect_step():
             wait(10)
         self.stop_robot()
 
@@ -71,7 +71,7 @@ class StairClimber:
     '''
 
     def operate_carriage_motor(self, speed):
-        self.carriage_motor.run_until_stalled(speed)
+        self.carriage_motor.run_until_stalled(speed, duty_limit=50) #might need to fine tune the duty limit
 
     '''
         This will be the function of raising/lowering the carriage and also how much we need to adjust it by
@@ -93,7 +93,7 @@ class StairClimber:
         # 1st step accelerate with both front and back motors, and then we will also be lowering the carriage to keep back wheels on the ground
 
         self.move_forward()
-        self.operate_carriage(ClimbingDirections.DOWN)
+        # self.operate_carriage(ClimbingDirections.DOWN) not sure if we will need this
 
         # 2nd step: need a way to determine when we have completed step 1
         # DO THIS PART=====================================================
@@ -101,6 +101,7 @@ class StairClimber:
         # 3rd step: will be to accelerate with front motors and raising the carriage
         self.move_forward()
         self.operate_carriage(ClimbingDirections.UP)
+
         self.number_of_steps += 1
 
     '''
