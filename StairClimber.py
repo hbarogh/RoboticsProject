@@ -27,7 +27,7 @@ class StairClimber:
         self.carriage_motor = carriage_motor
         self.dist_sensor = dist_sensor
         self.color_sensor = color_sensor
-
+        self.number_of_steps = 0
         #making the drive base here and will be using this to control the robot
         wheel_diameter = 56 #this is in mm
         axel_track = 120 #might need to be changed later
@@ -39,8 +39,9 @@ class StairClimber:
     detects something within 2 cm
     '''
     def move_forward(self, speed=200):
-        while self.dist_sensor.distance() > 20:
-            self.drive_base.drive(speed, 0) #putting zero for the turn rate
+        self.drive.drive(speed, 0)
+        while self.dist_sensor.distance() > self.detect_distance:
+            wait(10)
         self.stop_robot()
 
     '''
@@ -89,33 +90,47 @@ class StairClimber:
     This will be the function for climbing a step 
     '''
     def climb_step(self):
-        # 3 step process
-        # 1st step accellerate with both front and back motors, and then we will also be lowering the carriage to keep back wheels on the ground
+        # 3-step process
+        # 1st step accelerate with both front and back motors, and then we will also be lowering the carriage to keep back wheels on the ground
+
         self.move_forward()
         self.operate_carriage(ClimbingDirections.DOWN)
 
         # 2nd step: need a way to determine when we have completed step 1
         # DO THIS PART=====================================================
 
-        # 3rd step: will be to accellerate with front motors and raising the carriage
+        # 3rd step: will be to accelerate with front motors and raising the carriage
         self.move_forward()
         self.operate_carriage(ClimbingDirections.UP)
+        self.number_of_steps += 1
+
+    '''
+    This will be the function for going down steps
+    '''
+    def descend_step(self):
+        #every time we go down a step we will be subtracting one from the num_steps
+        self.number_of_steps -= 1
+        pass
 
 
     '''
     This will be the function to determine if we have completed the descent of the stairs
-    - One way we could do it is that we could log how many stairs that we climbed to do the acsent and then once we have climbed 
-    down that amount then we are at that descent and done. Not sure if that's allowed
+    - One way we could do it is that we could log how many stairs that we climbed to do the accent and then once we have climbed 
+    down that amount then we are at that descent and done.
     '''
-
     def completed_descent(self):
+        num_steps = self.number_of_steps
+        if num_steps == 0:
+            return True
 
-        pass
+        return False
 
     '''
     This function will be used to determine if we have completed the ascent of the stairs
+    - One way we could do this is by looking for the color black and then see if the distance using the ultrasonic
+    sensor is really far or has a big jump (if it hangs over the edge) and then we would know that we have completed 
+    the ascent.
     '''
-
     def completed_ascent(self):
         pass
 
