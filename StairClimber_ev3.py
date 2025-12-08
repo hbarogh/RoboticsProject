@@ -48,14 +48,12 @@ class StairClimberV2:
     '''
     This function will stop the robot from moving horizontally
     '''
-
     def stop_robot(self):
         self.drive_base.stop()
 
     '''
     This function will be detecting a step for the robot to CLIMB
     '''
-
     def detect_step(self):
         # this will be the true if there is something within 2 cm from the ultrasonic sensor
         return self.dist_sensor.distance() < 20
@@ -149,14 +147,13 @@ class StairClimberV2:
                 return True
 
         return False
-    
+
     '''
     This will be the main function for how the robot runs and will be climbing robots
     '''
-
     def run(self):
 
-        # going to have a ascending part of running and decsending part of running
+        # going to have a ascending part of running and descending part of running
         while not self.completed_ascent():
             if not self.detect_step():
                 self.move_forward()
@@ -167,7 +164,7 @@ class StairClimberV2:
         # first need to turn the robot
         self.turn_robot(360)
         while not self.completed_descent():
-            if not self.detect_step_descent():
+            if not self.detect_step_descending():
                 self.move_forward()
             else:
                 self.descend_step()
