@@ -1,6 +1,6 @@
 from pybricks.hubs import EV3Brick
 from pybricks.ev3devices import Motor, GyroSensor, TouchSensor
-from pybricks.parameters import Port, Direction, Button
+from pybricks.parameters import Port, Direction, Button, Color
 from pybricks.robotics import DriveBase
 from pybricks.tools import wait
 from pybricks.media.ev3dev import Font, SoundFile
@@ -61,23 +61,31 @@ class StairClimberV2:
         return self.dist_sensor.distance() < 20
 
     '''
-        This will be the function to rotate the robot
-        '''
+    This function will be used to detect when there is step there when the robot is decending
+    '''
+    def detect_step_descending(self):
+        color = self.color_sensor.color()
+        # if we see black, need to check if there is a big change in distance from the ultrasonic sensor
+        # if there is a distance greater than 10 cm, then we know that we have hit the top of the stairs
+        if color == Color.BLACK:
+            return self.dist_sensor.distance() > 100
+        return False
 
+    '''
+    This will be the function to rotate the robot
+    '''
     def turn_robot(self, degrees):
         self.drive_base.turn(degrees)  # for full roation we can just use 360 for 360 degrees
 
     '''
     This will be the function for operating the carriage motor
     '''
-
     def operate_carriage_motor(self, speed):
         self.carriage_motor.run_until_stalled(speed, duty_limit=50) #might need to fine tune the duty limit
 
     '''
         This will be the function of raising/lowering the carriage and also how much we need to adjust it by
-        '''
-
+    '''
     def operate_carriage(self, direction):
         if direction == ClimbingDirections.UP:
             self.operate_carriage_motor(200)
@@ -141,9 +149,7 @@ class StairClimberV2:
                 return True
 
         return False
-
-
-
+    
     '''
     This will be the main function for how the robot runs and will be climbing robots
     '''
