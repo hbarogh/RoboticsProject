@@ -189,7 +189,6 @@ class StairClimber:
             self.carriage_motor.run(700)  # NON-BLOCKING
             self.carriage_wheel_motor.run(700)  # NON-BLOCKING
 
-            # --- Allow parallel motion for 1 second ---------------
             while watch.time() < 5000:
                 wait(10)
 

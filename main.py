@@ -12,10 +12,11 @@ hub = PrimeHub()
 def main():
     hub = PrimeHub()
     #The ports can be changed when we have the actual robot
+
     left_motor = Motor(Port.F, Direction.COUNTERCLOCKWISE)
     right_motor = Motor(Port.E, Direction.CLOCKWISE)
     carriage_motor = Motor(Port.C, Direction.COUNTERCLOCKWISE)
-    carriage_wheel_motor = Motor(Port.B, Direction.CLOCKWISE)
+    carriage_wheel_motor = Motor(Port.B, Direction.COUNTERCLOCKWISE)
 
     color_sensor = ColorSensor(Port.D)
     dist_sensor = UltrasonicSensor(Port.A)
