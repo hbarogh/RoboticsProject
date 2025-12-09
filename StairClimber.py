@@ -68,7 +68,7 @@ class StairClimber:
         This will be the function to rotate the robot
     '''
     def turn_robot(self, degrees):
-        self.drive_base.turn(degrees)  # for full roation we can just use 360 for 360 degrees
+        self.drive_base.turn(degrees)
 
     '''
     This will be the function for operating the carriage motor
@@ -95,7 +95,7 @@ class StairClimber:
         # 1st step accelerate with both front and back motors, and then we will also be lowering the carriage to keep back wheels on the ground
 
         self.move_forward()
-        # self.operate_carriage(ClimbingDirections.DOWN) not sure if we will need this
+        self.operate_carriage(ClimbingDirections.UP)
 
         # 2nd step: need a way to determine when we have completed step 1
         # DO THIS PART=====================================================
@@ -149,19 +149,31 @@ class StairClimber:
     This will be the main function for how the robot runs and will be climbing robots
     '''
     def run(self):
+        # THIS IS THE OLD RUN FUNCTION
+        # # going to have a ascending part of running and descending part of running
+        # while not self.completed_ascent():
+        #     if not self.detect_step():
+        #         self.move_forward()
+        #     else:
+        #         self.climb_step()
+        #
+        # # this will be the descending part of running the program
+        # # first need to turn the robot
+        # self.turn_robot(360)
+        # while not self.completed_descent():
+        #     if not self.detect_step_descending():
+        #         self.move_forward()
+        #     else:
+        #         self.descend_step()
 
-        # going to have a ascending part of running and descending part of running
+        #this is the code that we were testing out in pybricks
         while not self.completed_ascent():
-            if not self.detect_step():
-                self.move_forward()
-            else:
-                self.climb_step()
+            # self.move_forward()
+            self.operate_carriage(ClimbingDirections.UP)
+            watch = StopWatch()
 
-        # this will be the descending part of running the program
-        # first need to turn the robot
-        self.turn_robot(360)
-        while not self.completed_descent():
-            if not self.detect_step_descending():
-                self.move_forward()
-            else:
-                self.descend_step()
+            self.drive_base.drive(300, 0)  # speed, turn_rate
+            while watch.time() < 5000:  # 5000 ms = 5 seconds
+                wait(10)  # let PyBricks update motors
+            self.stop_robot()
+            self.operate_carriage(ClimbingDirections.DOWN)

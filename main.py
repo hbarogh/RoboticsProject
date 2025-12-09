@@ -13,13 +13,12 @@ def main():
     hub = PrimeHub()
     #The ports can be changed when we have the actual robot
 
-    left_motor = Motor(Port.B, Direction.CLOCKWISE)
-    right_motor = Motor(Port.A, Direction.COUNTERCLOCKWISE)
-    carriage_motor = Motor(Port.E)
+    left_motor = Motor(Port.F, Direction.CLOCKWISE)
+    right_motor = Motor(Port.E, Direction.COUNTERCLOCKWISE)
+    carriage_motor = Motor(Port.C, Direction.COUNTERCLOCKWISE)
 
-
-    color_sensor = ColorSensor(Port.D)
-    dist_sensor = UltrasonicSensor(Port.B)
+    color_sensor = ColorSensor(Port.B)
+    dist_sensor = UltrasonicSensor(Port.A)
     robot = StairClimber(left_motor, right_motor, carriage_motor, dist_sensor, color_sensor)
     robot.run()
 
