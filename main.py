@@ -15,9 +15,9 @@ def main():
     left_motor = Motor(Port.F, Direction.COUNTERCLOCKWISE)
     right_motor = Motor(Port.E, Direction.CLOCKWISE)
     carriage_motor = Motor(Port.C, Direction.COUNTERCLOCKWISE)
-    carriage_wheel_motor = Motor(Port.D, Direction.CLOCKWISE)
+    carriage_wheel_motor = Motor(Port.B, Direction.CLOCKWISE)
 
-    color_sensor = ColorSensor(Port.B)
+    color_sensor = ColorSensor(Port.D)
     dist_sensor = UltrasonicSensor(Port.A)
     robot = StairClimber(left_motor, right_motor, carriage_wheel_motor, carriage_motor, dist_sensor, color_sensor)
     robot.run()
