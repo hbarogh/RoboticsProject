@@ -13,8 +13,8 @@ def main():
     hub = PrimeHub()
     #The ports can be changed when we have the actual robot
 
-    left_motor = Motor(Port.A)
-    right_motor = Motor(Port.C)
+    left_motor = Motor(Port.B, Direction.CLOCKWISE)
+    right_motor = Motor(Port.A, Direction.COUNTERCLOCKWISE)
     carriage_motor = Motor(Port.E)
 
 
