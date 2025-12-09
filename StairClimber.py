@@ -3,19 +3,13 @@ from pybricks.pupdevices import Motor, ColorSensor, UltrasonicSensor, ForceSenso
 from pybricks.parameters import Button, Color, Direction, Port, Stop
 from pybricks.robotics import DriveBase
 from pybricks.tools import wait, StopWatch
-from enum import Enum
 
 '''
 This is the code for our stair climbing robot
-
-- back_motor is the motor that controls the back wheels
-- front motor is the motor that controls the front wheels
-
 - All of the measurements will be in cm
 '''
 
-
-class ClimbingDirections(Enum):
+class ClimbingDirections:
     UP = "up"
     DOWN = "down"
 
