@@ -15,9 +15,10 @@ class ClimbingDirections:
 
 
 class StairClimber:
-    def __init__(self, left_motor, right_motor, carriage_motor, dist_sensor, color_sensor):
+    def __init__(self, left_motor, right_motor, carriage_wheel_motor, carriage_motor, dist_sensor, color_sensor):
         self.left_motor = left_motor
         self.right_motor = right_motor
+        self.carriage_wheel_motor = carriage_wheel_motor
         self.carriage_motor = carriage_motor
         self.dist_sensor = dist_sensor
         self.color_sensor = color_sensor
@@ -168,12 +169,11 @@ class StairClimber:
 
         #this is the code that we were testing out in pybricks
         while not self.completed_ascent():
-            # self.move_forward()
-            self.operate_carriage(ClimbingDirections.UP)
             watch = StopWatch()
-
-            self.drive_base.drive(300, 0)  # speed, turn_rate
-            while watch.time() < 5000:  # 5000 ms = 5 seconds
-                wait(10)  # let PyBricks update motors
+            while watch.time() < 1000:
+                self.drive_base.drive(700,0)
+                if watch.time() > 500:
+                    self.operate_carriage(ClimbingDirections.UP)
+                    self.carriage_wheel_motor.run(200)
             self.stop_robot()
             self.operate_carriage(ClimbingDirections.DOWN)
