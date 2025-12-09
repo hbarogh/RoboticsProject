@@ -36,6 +36,7 @@ class StairClimber:
     '''
 
     def move_forward(self, speed=700):
+        print("inside move forward function")
         self.drive_base.drive(speed, 0)
         while not self.detect_step():
             wait(1)
@@ -56,13 +57,13 @@ class StairClimber:
 
     def detect_step(self):
         # this will be the true if there is something within 2 cm from the ultrasonic sensor
-        step_detected = self.dist_sensor.distance() < 3
+        step_detected = self.dist_sensor.distance() < 3000
         print(f"step detected: {step_detected}")
         return step_detected
 
     '''
     This function will be used to detect when there is step there when the robot is decending
-    '''
+'''
 
     def detect_step_descending(self):
         color = self.color_sensor.color()
@@ -165,41 +166,38 @@ class StairClimber:
     def run(self):
 
         # # going to have a ascending part of running and descending part of running
-        while not self.completed_ascent():
-            if not self.detect_step():
-                self.move_forward()
-            else:
-                self.climb_step()
-
-        # this will be the descending part of running the program
-        # first need to turn the robot
-        while not self.completed_descent():
-            if not self.detect_step_descending():
-                self.move_forward()
-            else:
-                self.descend_step()
-
         # while not self.completed_ascent():
-        #     print("trying to operate carriage")
-        #     watch = StopWatch()
+        #     if not self.detect_step():
+        #         self.move_forward()
+        #     else:
+        #         print("hit inside the else")
+        #         self.climb_step()
 
-        #     # while watch.time() < 1000:
-        #     #     self.drive_base.drive(700,0)
-        #     #     if watch.time() > 500:
-        #     #         self.operate_carriage(ClimbingDirections.UP)
-        #     #         self.carriage_wheel_motor.run(200)
-        #     # self.stop_robot()
-        #     # self.operate_carriage(ClimbingDirections.DOWN)
+        # # this will be the descending part of running the program
+        # # first need to turn the robot
+        # while not self.completed_descent():
+        #     if not self.detect_step_descending():
+        #         self.move_forward()
+        #     else:
+        #         self.descend_step()
 
-        #     self.drive_base.drive(700, 0)
-        #     self.carriage_motor.run(300)               # NON-BLOCKING
-        #     self.carriage_wheel_motor.run(200)         # NON-BLOCKING
+        while not self.completed_ascent():
+            print("trying to operate carriage")
+            watch = StopWatch()
 
-        #     # --- Allow parallel motion for 1 second ---------------
-        #     while watch.time() < 1000:
-        #         wait(10)
+            self.drive_base.drive(500, 0)
+            self.carriage_motor.run(700)  # NON-BLOCKING
+            self.carriage_wheel_motor.run(700)  # NON-BLOCKING
 
-        #     # --- Stop motors --------------------------------------
-        #     self.drive_base.stop()
-        #     self.carriage_motor.stop()
-        #     self.carriage_wheel_motor.stop()
+            # --- Allow parallel motion for 1 second ---------------
+            while watch.time() < 5000:
+                wait(10)
+
+            self.drive_base.stop()
+            self.carriage_motor.stop()
+            self.carriage_wheel_motor.stop()
+            self.drive_base.drive(500, 0)
+            self.operate_carriage(ClimbingDirections.DOWN)
+            print("finished the while loop")
+
+
